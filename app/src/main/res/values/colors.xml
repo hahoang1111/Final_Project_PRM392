@@ -20,11 +20,18 @@
     <color name="gray">#757575</color>
     <color name="light_gray">#E0E0E0</color>
 
+
 <!--    <color name="lightPurpleBtn">#EDEEFF</color>-->
 <!--    <color name="PurpleBtn">#6735A4</color>-->
 <!--    <color name="blueCat">#1E73C5</color>-->
 <!--    <color name="brown">#F0D9C1</color>-->
 <!--    <color name="lightGrey">#ECEDEF</color>-->
+
+    <!--    <color name="lightPurpleBtn">#EDEEFF</color>-->
+    <!--    <color name="PurpleBtn">#6735A4</color>-->
+    <!--    <color name="blueCat">#1E73C5</color>-->
+    <!--    <color name="brown">#F0D9C1</color>-->
+    <!--    <color name="lightGrey">#ECEDEF</color>-->
 
     <color name="dark_gray">#424242</color>
     <color name="green">#4CAF50</color>
