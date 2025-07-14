@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Toast;
+import android.util.Patterns;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -57,21 +58,46 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    // Kiểm tra email & password không để trống
+
+
     private boolean validateInputs() {
         String email = binding.emailEditText.getText().toString().trim();
         String password = binding.passwordEditText.getText().toString().trim();
 
+        // XÓA hết error trước khi kiểm tra
+        binding.emailInputLayout.setError(null);
+        binding.passwordInputLayout.setError(null);
+
+        // 1. Bắt buộc nhập email
         if (TextUtils.isEmpty(email)) {
-            binding.emailEditText.setError("Email is required");
+            binding.emailInputLayout.setError("Email is required");
+            binding.emailInputLayout.requestFocus();
             return false;
         }
+        // 2. Kiểm tra định dạng email
+        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            binding.emailInputLayout.setError("Invalid email format");
+            binding.emailInputLayout.requestFocus();
+            return false;
+        }
+
+        // 3. Bắt buộc nhập password
         if (TextUtils.isEmpty(password)) {
-            binding.passwordEditText.setError("Password is required");
+            binding.passwordInputLayout.setError("Password is required");
+            binding.passwordInputLayout.requestFocus();
             return false;
         }
+        // 4. Kiểm tra độ dài password (ví dụ tối thiểu 6 ký tự)
+        if (password.length() < 6) {
+            binding.passwordInputLayout.setError("Password must be at least 6 characters");
+            binding.passwordInputLayout.requestFocus();
+            return false;
+        }
+
         return true;
     }
+
+
 
     // Thực hiện đăng nhập thông qua UserRepository
     private void loginUser() {
