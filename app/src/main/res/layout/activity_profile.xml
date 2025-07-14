@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,6 +8,7 @@
     android:background="@color/white"
     tools:context=".Activity.ProfileActivity">
 
+    <!-- Nút Back: quay về màn trước, sử dụng ImageButton với nền ripple borderless -->
     <ImageButton
         android:id="@+id/backButton"
         android:layout_width="48dp"
@@ -19,6 +21,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- Tiêu đề màn hình Profile, căn giữa so với nút Back về chiều ngang và chung hàng trên cùng -->
     <TextView
         android:id="@+id/titleTextView"
         android:layout_width="wrap_content"
@@ -32,6 +35,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/backButton" />
 
+    <!-- Khung cuộn để chứa nội dung profile dài hơn màn hình -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -39,11 +43,13 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/titleTextView">
 
+        <!-- Container chính trong ScrollView, dùng ConstraintLayout để bố trí -->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="16dp">
 
+            <!-- Khu vực ảnh đại diện, dùng FrameLayout để chồng ảnh và chữ “Add Photo” -->
             <FrameLayout
                 android:id="@+id/profileImageLayout"
                 android:layout_width="120dp"
@@ -53,12 +59,14 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
+                <!-- Ảnh đại diện dạng tròn, dùng thư viện CircleImageView -->
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/profileImage"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:src="@drawable/placeholder_user" />
 
+                <!-- Text “Add Photo” nằm ở dưới ảnh, nền bán trong suốt để dễ đọc -->
                 <TextView
                     android:id="@+id/changePhotoText"
                     android:layout_width="wrap_content"
@@ -72,6 +80,7 @@
                     android:textSize="12sp" />
             </FrameLayout>
 
+            <!-- Input Họ và tên -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/nameInputLayout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -86,9 +95,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName" />
-
             </com.google.android.material.textfield.TextInputLayout>
 
+            <!-- Input Email (khóa, không cho sửa) -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/emailInputLayout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -104,9 +113,9 @@
                     android:layout_height="wrap_content"
                     android:enabled="false"
                     android:inputType="textEmailAddress" />
-
             </com.google.android.material.textfield.TextInputLayout>
 
+            <!-- Input Số điện thoại -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/phoneInputLayout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -121,9 +130,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="phone" />
-
             </com.google.android.material.textfield.TextInputLayout>
 
+            <!-- Input Tiền sử bệnh lý (nhiều dòng) -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/medicalHistoryInputLayout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -140,9 +149,9 @@
                     android:gravity="top"
                     android:inputType="textMultiLine"
                     android:lines="4" />
-
             </com.google.android.material.textfield.TextInputLayout>
 
+            <!-- Nút Lưu thay đổi -->
             <Button
                 android:id="@+id/saveButton"
                 android:layout_width="match_parent"
@@ -153,6 +162,7 @@
                 android:textSize="16sp"
                 app:layout_constraintTop_toBottomOf="@+id/medicalHistoryInputLayout" />
 
+            <!-- Nút Đăng xuất, styled outline và text màu đỏ -->
             <Button
                 android:id="@+id/logoutButton"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
@@ -165,6 +175,7 @@
                 android:textSize="16sp"
                 app:layout_constraintTop_toBottomOf="@+id/saveButton" />
 
+            <!-- Nút Đổi mật khẩu để hiển thị thêm form -->
             <Button
                 android:id="@+id/changePasswordButton"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
@@ -176,6 +187,7 @@
                 android:textSize="16sp"
                 app:layout_constraintTop_toBottomOf="@+id/logoutButton" />
 
+            <!-- Form Đổi mật khẩu: 3 input lần lượt Current/New/Confirm, ẩn mặc định -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/currentPasswordInputLayout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -230,6 +242,7 @@
                     android:inputType="textPassword" />
             </com.google.android.material.textfield.TextInputLayout>
 
+            <!-- Nút Gửi mật khẩu mới, ẩn khi form chưa hiển thị -->
             <Button
                 android:id="@+id/submitPasswordButton"
                 android:layout_width="match_parent"
@@ -243,6 +256,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
+    <!-- ProgressBar che phủ toàn màn khi đang load hoặc xử lý -->
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"
