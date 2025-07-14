@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Final_Project_PRM392</string>
+    <string name="schedule_appointments_nwith_ease">Schedule Appointments\nWith Ease</string>
+    <string name="how_are_you_today">How Are You Today?</string>
+    <string name="hi_mosen_jamali">Hi, Mosen Jamali</string>
+    <string name="todo">TODO</string>
+    <string name="todo1">TODO</string>
+    <string name="searching">Searching...</string>
+    <string name="todo2">TODO</string>
+    <string name="top_doctors">Top Doctors</string>
+    <string name="see_all">See all</string>
+    <string name="todo3">TODO</string>
+    <string name="todo4">TODO</string>
+    <string name="todo5">TODO</string>
+    <string name="todo6">TODO</string>
+    <string name="back">Back</string>
+</resources>
