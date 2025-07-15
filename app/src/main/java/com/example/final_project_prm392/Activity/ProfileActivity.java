@@ -25,52 +25,41 @@ import java.util.UUID;
 
 public class ProfileActivity extends AppCompatActivity {
 
-    // Binding tới layout và ViewModel
     private ActivityProfileBinding binding;
     private ProfileViewModel viewModel;
-    private Uri selectedImageUri; // URI ảnh người dùng chọn
-    private boolean isPasswordSectionVisible = false; // theo dõi hiển thị form đổi mật khẩu
-
-    // Launcher để chọn ảnh từ thiết bị
+    private Uri selectedImageUri;
+    private boolean isPasswordSectionVisible = false;
     private final ActivityResultLauncher<String> getContent = registerForActivityResult(
             new ActivityResultContracts.GetContent(),
             uri -> {
                 if (uri != null) {
-                    selectedImageUri = uri; // lưu URI đã chọn
-                    binding.profileImage.setImageURI(uri); // hiển thị lên ImageView
-                    binding.changePhotoText.setText("Change Photo"); // đổi text
+                    selectedImageUri = uri;
+                    binding.profileImage.setImageURI(uri);
+                    binding.changePhotoText.setText("Change Photo");
                 }
             });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Khởi tạo binding và set layout
         binding = ActivityProfileBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        // Khởi tạo ViewModel
         viewModel = new ProfileViewModel();
 
-        // Thiết lập sự kiện UI, load dữ liệu và theo dõi LiveData
         setupUI();
         loadUserProfile();
         observeViewModel();
     }
 
-    // Thiết lập các listener cho UI
     private void setupUI() {
-        // Nút Back: finish activity
         binding.backButton.setOnClickListener(v -> finish());
 
-        // Click vào ảnh đại diện: mở picker
         binding.profileImageLayout.setOnClickListener(v ->
                 getContent.launch("image/*"));
 
-        // Nút Save: lưu thông tin profile
         binding.saveButton.setOnClickListener(v -> saveProfile());
 
-        // Nút Logout: đăng xuất và về LoginActivity
         binding.logoutButton.setOnClickListener(v -> {
             FirebaseAuth.getInstance().signOut();
             Intent intent = new Intent(ProfileActivity.this, LoginActivity.class);
@@ -79,14 +68,13 @@ public class ProfileActivity extends AppCompatActivity {
             finish();
         });
 
-        // Nút Change Password: toggle hiển thị form đổi mật khẩu
+        // Thêm sự kiện cho nút Change Password
         binding.changePasswordButton.setOnClickListener(v -> togglePasswordSection());
 
-        // Nút Submit New Password: thực hiện đổi mật khẩu
+        // Thêm sự kiện cho nút Submit New Password
         binding.submitPasswordButton.setOnClickListener(v -> changePassword());
     }
 
-    // Hiện/ẩn section đổi mật khẩu
     private void togglePasswordSection() {
         isPasswordSectionVisible = !isPasswordSectionVisible;
         int visibility = isPasswordSectionVisible ? View.VISIBLE : View.GONE;
@@ -95,7 +83,7 @@ public class ProfileActivity extends AppCompatActivity {
         binding.confirmNewPasswordInputLayout.setVisibility(visibility);
         binding.submitPasswordButton.setVisibility(visibility);
 
-        // Nếu ẩn, xóa hết nội dung các field
+        // Xóa các trường khi ẩn đi
         if (!isPasswordSectionVisible) {
             binding.currentPasswordEditText.setText("");
             binding.newPasswordEditText.setText("");
@@ -103,36 +91,35 @@ public class ProfileActivity extends AppCompatActivity {
         }
     }
 
-    // Xử lý logic đổi mật khẩu
     private void changePassword() {
         String currentPassword = binding.currentPasswordEditText.getText().toString().trim();
         String newPassword = binding.newPasswordEditText.getText().toString().trim();
         String confirmNewPassword = binding.confirmNewPasswordEditText.getText().toString().trim();
 
-        // Kiểm tra validation
         if (TextUtils.isEmpty(currentPassword)) {
             binding.currentPasswordEditText.setError("Current password is required");
             return;
         }
+
         if (TextUtils.isEmpty(newPassword)) {
             binding.newPasswordEditText.setError("New password is required");
             return;
         }
+
         if (newPassword.length() < 6) {
             binding.newPasswordEditText.setError("Password must be at least 6 characters");
             return;
         }
+
         if (!newPassword.equals(confirmNewPassword)) {
             binding.confirmNewPasswordEditText.setError("Passwords do not match");
             return;
         }
 
-        // Hiển thị progress và gọi ViewModel
         binding.progressBar.setVisibility(View.VISIBLE);
         viewModel.changePassword(currentPassword, newPassword);
     }
 
-    // Quan sát LiveData từ ViewModel
     private void observeViewModel() {
         viewModel.getIsLoading().observe(this, isLoading ->
                 binding.progressBar.setVisibility(isLoading ? View.VISIBLE : View.GONE));
@@ -140,14 +127,12 @@ public class ProfileActivity extends AppCompatActivity {
         viewModel.getErrorMessage().observe(this, errorMessage -> {
             if (errorMessage != null && !errorMessage.isEmpty()) {
                 Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
-                // Nếu thành công, ẩn form đổi mật khẩu
                 if (errorMessage.equals("Password updated successfully")) {
-                    togglePasswordSection();
+                    togglePasswordSection(); // Ẩn form sau khi đổi mật khẩu thành công
                 }
             }
         });
 
-        // Khi user data được load, cập nhật UI
         viewModel.getUserLiveData().observe(this, user -> {
             if (user != null) {
                 updateUI(user);
@@ -155,7 +140,6 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
-    // Load profile nếu user đã đăng nhập
     private void loadUserProfile() {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser == null) {
@@ -164,17 +148,16 @@ public class ProfileActivity extends AppCompatActivity {
             finish();
             return;
         }
-        viewModel.loadUserProfile(); // gọi ViewModel lấy dữ liệu
+
+        viewModel.loadUserProfile();
     }
 
-    // Cập nhật dữ liệu user lên các field
     private void updateUI(User user) {
         binding.nameEditText.setText(user.getName());
         binding.emailEditText.setText(user.getEmail());
         binding.phoneEditText.setText(user.getPhone());
         binding.medicalHistoryEditText.setText(user.getMedicalHistory());
 
-        // Nếu có URL ảnh, load bằng Glide
         if (user.getProfilePicture() != null && !user.getProfilePicture().isEmpty()) {
             Glide.with(this)
                     .load(user.getProfilePicture())
@@ -184,24 +167,39 @@ public class ProfileActivity extends AppCompatActivity {
         }
     }
 
-    // Lưu profile khi nhấn Save
     private void saveProfile() {
         String name = binding.nameEditText.getText().toString().trim();
         String phone = binding.phoneEditText.getText().toString().trim();
         String medicalHistory = binding.medicalHistoryEditText.getText().toString().trim();
 
-        // Kiểm tra bắt buộc
-        if (name.isEmpty()) {
+        // --- Validate Name ---
+        if (TextUtils.isEmpty(name)) {
             binding.nameEditText.setError("Name is required");
+            binding.nameEditText.requestFocus();
             return;
         }
-        if (phone.isEmpty()) {
-            binding.phoneEditText.setError("Phone is required");
+        if (name.length() > 30) {
+            binding.nameEditText.setError("Name must be under 30 characters");
+            binding.nameEditText.requestFocus();
             return;
         }
 
+        // --- Validate Phone ---
+        if (TextUtils.isEmpty(phone)) {
+            binding.phoneEditText.setError("Phone is required");
+            binding.phoneEditText.requestFocus();
+            return;
+        }
+        // Regex: 10 chữ số, bắt đầu bằng '0'
+        if (!phone.matches("^0\\d{9}$")) {
+            binding.phoneEditText.setError("Phone must be 10 digits and start with 0");
+            binding.phoneEditText.requestFocus();
+            return;
+        }
+
+        // Nếu pass hết validate thì mới show progress và tiếp tục lưu
         binding.progressBar.setVisibility(View.VISIBLE);
-        // Nếu chọn ảnh mới thì upload trước, ngược lại chỉ cập nhật thông tin
+
         if (selectedImageUri != null) {
             uploadImageAndSaveProfile(name, phone, medicalHistory);
         } else {
@@ -209,7 +207,7 @@ public class ProfileActivity extends AppCompatActivity {
         }
     }
 
-    // Upload ảnh lên Firebase Storage, sau đó lưu profile
+
     private void uploadImageAndSaveProfile(String name, String phone, String medicalHistory) {
         StorageReference storageRef = FirebaseStorage.getInstance().getReference();
         StorageReference imageRef = storageRef.child("profile_images/" + UUID.randomUUID().toString());
@@ -226,7 +224,6 @@ public class ProfileActivity extends AppCompatActivity {
                 });
     }
 
-    // Lưu profile khi không có ảnh mới
     private void saveProfileWithoutImage(String name, String phone, String medicalHistory) {
         viewModel.updateUserProfile(name, phone, medicalHistory, null);
     }
