@@ -7,6 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".Activity.RescheduleAppointmentActivity">
 
+    <!-- Nút mở hộp thoại chọn ngày -->
     <Button
         android:id="@+id/datePickerButton"
         android:layout_width="wrap_content"
@@ -17,6 +18,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp" />
 
+    <!-- Hiển thị ngày đã chọn từ DatePicker -->
     <TextView
         android:id="@+id/selectedDate"
         android:layout_width="wrap_content"
@@ -27,6 +29,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="8dp" />
 
+    <!-- Spinner chọn khung giờ hẹn mới -->
     <Spinner
         android:id="@+id/timeSlotSpinner"
         android:layout_width="wrap_content"
@@ -36,6 +39,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp" />
 
+    <!-- Nút xác nhận đặt lại lịch hẹn -->
     <Button
         android:id="@+id/rescheduleButton"
         android:layout_width="wrap_content"
