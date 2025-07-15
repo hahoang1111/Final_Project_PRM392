@@ -1246,7 +1246,7 @@ public class LibrariesForLibsInPluginsBlock extends AbstractExternalDependencyFa
 
         /**
          * Plugin provider for <b>android.application</b> with plugin id <b>com.android.application</b> and
-         * with version reference <b>android.gradle.plugin</b>
+         * with version <b>8.0.2</b>
          * <p>
          * This plugin was declared in catalog libs.versions.toml
          */
